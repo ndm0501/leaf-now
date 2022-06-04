@@ -4,13 +4,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import "./Login.css";
-import BrandLogo from "../assets/icons/leaf-now-brand.svg";
+import BrandLogo from "../assets/icons/leaf-now.svg";
 
 import Button from '../components/Button';
 
 // Actions
 import { userLogin } from '../redux/actions/authActions';
-import { getStorage, setStorage } from "../utils/storage";
+import { getStorage } from "../utils/storage";
 
 const Login = ({location}) => {
   const [state, setState] = useState({
@@ -20,7 +20,7 @@ const Login = ({location}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const authDetails = useSelector(state => state.auth);
-  const { loading, error, user } = authDetails;
+  const { user } = authDetails;
 
   const isLoggedIn = authDetails.isLoggedIn || (getStorage('leafNowUser') && getStorage('leafNowUser').isLoggedIn);
   const prevPath = location.state && location.state.prevPath;
@@ -37,7 +37,6 @@ const Login = ({location}) => {
       return;
     }
     if(isLoggedIn){
-      setStorage('leafNowUser', {isLoggedIn: true, userId:user.userId, authToken: user.token});
       history.push('/');
     }
   },[user]);
@@ -49,7 +48,7 @@ const Login = ({location}) => {
   const handleChange = (e) => {
     setState(state =>({...state, [e.target.name]: e.target.value}));
   }
-  console.log(user)
+  
   return (
     <div className="loginscreen">
       <div className="loginscreen__formcontainer">

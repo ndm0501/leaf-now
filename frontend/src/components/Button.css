@@ -1,4 +1,7 @@
 
+.button{
+    height: 40px;
+}
 .button__primary{
     background-color: #6cb41b !important;
     color: white;

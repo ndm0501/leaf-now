@@ -13,6 +13,8 @@ import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import Login from "./screens/Login";
+import SignupScreen from "./screens/SignupScreen";
+import UploadProductScreen from "./screens/UploadProductScreen";
 import ProtectedRoute from './components/ProtectedRoute';
 
 
@@ -29,8 +31,10 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomeScreen} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={SignupScreen} />
           <Route exact path="/product/:id" component={ProductScreen} />
           <ProtectedRoute exact path="/cart" component={CartScreen} />
+          <ProtectedRoute exact path="/sell-donate" component={UploadProductScreen} />
         </Switch>
       </main>
     </Router>

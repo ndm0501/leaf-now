@@ -27,6 +27,41 @@ export const authReducers = (state = USER_INITIAL_STATE, action) => {
             error: action.payload
         }
 
+    case actionTypes.USER_SIGNUP_REQUEST:
+      return { ...state };
+
+    case actionTypes.USER_SIGNUP_SUCCESS:
+        return {
+            ...state,
+            loading: false,
+            user: action.payload,
+            isLoggedIn: true
+        }
+    
+    case actionTypes.USER_SIGNUP_FAIL:
+        return {
+            ...state,
+            loading: false,
+            error: action.payload
+        }
+
+    case actionTypes.USER_LOGOUT_REQUEST:
+      return { ...state };
+
+    case actionTypes.USER_LOGOUT_SUCCESS:
+        return {
+            ...state,
+            loading: false,
+            isLoggedIn: false
+        }
+        
+    case actionTypes.USER_LOGOUT_FAIL:
+        return {
+            ...state,
+            loading: false,
+            error: action.payload
+        }
+
     default:
         return {...state};
   }

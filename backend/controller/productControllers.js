@@ -38,27 +38,45 @@ const uploadProduct = async (req, res) => {
       async (err, result)=>{
 
         if(!err){
-          let newProduct = new Product({
-            name: name,
-            description: description,
-            price: isDonation? 0 : price,
-            countInStock: countInStock,
-            imageUrl: result.secure_url,
-            imageId: result.public_id,
-            sellerOrDonorId: userId,
-            isDonation: isDonation,
-          });
+          
+          let newProduct;
+          let boolIsDonation = isDonation === 'true' ? true : false;
+          
+          if(boolIsDonation ){
+              newProduct = new Product({
+              name: name,
+              description: description,
+              countInStock: countInStock,
+              imageUrl: result.secure_url,
+              imageId: result.public_id,
+              sellerOrDonorId: userId,
+              isDonation: isDonation,
+              price: 0,
+            });
+          }else{
+             newProduct = new Product({
+              name: name,
+              description: description,
+              countInStock: countInStock,
+              imageUrl: result.secure_url,
+              imageId: result.public_id,
+              sellerOrDonorId: userId,
+              isDonation: isDonation,
+              price: price,
+            });
+          }
+          
           const savedProduct = await newProduct.save();
           return res.status(201).json({
             message:"Product added successfully",
-            name: name,
-            description: description,
-            price: isDonation? 0 : price,
-            countInStock: countInStock,
-            imageUrl: result.secure_url,
-            imageId: result.public_id,
-            sellerOrDonorId: userId,
-            isDonation: isDonation,
+            name: savedProduct.name,
+            description: savedProduct.description,
+            price: savedProduct.price,
+            countInStock: savedProduct.countInStock,
+            imageUrl: savedProduct.secure_url,
+            imageId: savedProduct.public_id,
+            sellerOrDonorId: savedProduct.userId,
+            isDonation: savedProduct.isDonation,
           })
         }else{
           return res.status(503).json({
@@ -82,7 +100,6 @@ const updateProduct = async (req, res) => {
     let product = await Product.findById(productId);
 
     if(product.imageId){
-      console.log(product.imageId)
       await cloudinary.uploader.destroy(product.imageId);
     }
 

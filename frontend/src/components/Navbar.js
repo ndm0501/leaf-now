@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import "./Navbar.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getStorage, removeStorage } from '../utils/storage';
-import Button from './Button';
-import { userLogout } from '../redux/actions/authActions';
+import Button from "./Button";
+import { userLogout } from "../redux/actions/authActions";
+import BrandLogo from "../assets/icons/leaf-now.svg";
 
-const Navbar = ({ click }) => {
+const Navbar = ({ click, location }) => {
   const cart = useSelector((state) => state.cart);
-  const authDetails = useSelector(state => state.auth);
+  const authDetails = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -19,17 +19,52 @@ const Navbar = ({ click }) => {
   };
 
   const handleLogout = () => {
-    removeStorage('leafNowUser');
     dispatch(userLogout());
-    history.push('/login');
+    history.push("/login");
+  };
+  const handleSignup = () => {
+    dispatch(userLogout());
+    history.push("/signup");
+  };
+  const handleLogin = () => {
+    dispatch(userLogout());
+    history.push("/login");
+  };
+  const handleSellOrDonate = () => {
+    history.push("/sell-donate")
   }
-  
-  const isLoggedIn = authDetails.isLoggedIn || (getStorage('leafNowUser') && getStorage('leafNowUser').isLoggedIn);
-  
+  const renderActionButton = () => {
+    if (location.pathname === "/login") {
+      return (
+        <li>
+          <Button type="secondary" onClick={handleSignup} label="Signup" />
+        </li>
+      );
+    } else if (location.pathname === "/signup") {
+      return (
+        <li>
+          <Button type="secondary" onClick={handleLogin} label="Login" />
+        </li>
+      );
+    } else {
+      return (
+        <li>
+          <Button
+            type="secondary"
+            onClick={handleLogin}
+            label="Login / Signup"
+          />
+        </li>
+      );
+    }
+  };
+  const isLoggedIn = authDetails.isLoggedIn;
+  const isSellerOrDonor = authDetails.user && authDetails.user.isSellerOrDonor;
+
   return (
     <nav className="navbar">
       <div className="navbar__logo">
-        <h2>Leaf Now</h2>
+        <img src={BrandLogo} width={50} height={50} alt="Brand Logo"/>
       </div>
 
       <ul className="navbar__links">
@@ -41,16 +76,30 @@ const Navbar = ({ click }) => {
             </span>
           </Link>
         </li>
-        <li>
-          <Link to="/">Shop</Link>
-        </li>
-        {
-          isLoggedIn ? 
-          <li>
-            <Button type="secondary" onClick={handleLogout} label="Logout"/>
-          </li> :
-          null
-        }
+
+        {isLoggedIn ? (
+          <>
+            {isSellerOrDonor ? <li>
+              <Button
+                type="primary"
+                onClick={handleSellOrDonate}
+                label="Sell / Donate"
+              />
+            </li>:null}
+            <li>
+              <Button type="secondary" onClick={handleLogout} label="Logout" />
+            </li>
+            <li>
+              <Link to="/" className="user__avatar">
+                <i class="fas fa-solid fa-user"></i>
+              </Link>
+            </li>
+
+            
+          </>
+        ) : (
+          renderActionButton()
+        )}
       </ul>
 
       <div className="hamburger__menu" onClick={click}>
@@ -62,4 +111,4 @@ const Navbar = ({ click }) => {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);

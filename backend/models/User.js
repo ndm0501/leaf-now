@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema({
     isSellerOrDonor: {
         type: Boolean,
         default: false,
+        default: true,
     },
     address: {
         type: String,

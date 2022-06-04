@@ -46,3 +46,24 @@ export const getProductDetailsReducer = (state = { product: {} }, action) => {
       return state;
   }
 };
+
+export const uploadProductDetailsReducer = (state={}, action) => {
+  switch (action.type) {
+    case actionTypes.UPLOAD_PRODUCT_DETAILS_REQUEST:
+      return {
+        loading: true,
+      };
+    case actionTypes.GET_PRODUCT_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        product: action.payload,
+      };
+    case actionTypes.GET_PRODUCT_DETAILS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+}

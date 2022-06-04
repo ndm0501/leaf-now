@@ -5,7 +5,6 @@ const JWT = require("jsonwebtoken");
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, verifyPassword, isSellerOrDonor = false } = req.body;
-    console.log(req.body);
 
     if (!name || !email || !password || !verifyPassword) {
       return res.status(400).json({ message: "All fields are required" });
@@ -25,7 +24,7 @@ const registerUser = async (req, res) => {
 
     const salt = await Bcrypt.genSalt(15);
     const hashedPassword = await Bcrypt.hash(password, salt);
-
+    
     const newUser = new User({
       name,
       email,
@@ -82,6 +81,7 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       userId: user._id,
+      isSellerOrDonor: user.isSellerOrDonor,
     });
 
   } catch (e) {

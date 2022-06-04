@@ -16,9 +16,6 @@ const connectDB = require("./config/db");
 connectDB();
 
 const app = express();
-// const forms = multer();
-
-// app.use(forms.array())
 app.use(
   cookieSession({
     name: "leaf-now-session",
