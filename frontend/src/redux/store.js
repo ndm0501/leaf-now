@@ -9,6 +9,8 @@ import {
   getProductsReducer,
   getProductDetailsReducer,
 } from "./reducers/productReducers";
+import { getStorage } from "../utils/storage";
+
 
 const reducer = combineReducers({
   cart: cartReducer,
@@ -19,14 +21,17 @@ const reducer = combineReducers({
 
 const middleware = [thunk];
 
-const cartItemsInLocalStorage = localStorage.getItem("cart")
-  ? JSON.parse(localStorage.getItem("cart"))
-  : [];
+const cartItemsInLocalStorage = getStorage("cart")|| [];
+const data = getStorage("leafNowUser") || {};
 
 const INITIAL_STATE = {
   cart: {
     cartItems: cartItemsInLocalStorage,
   },
+  auth: {
+    user: {token:data.authToken, userId: data.userId, isSellerOrDonor: data.isSellerOrDonor},
+    isLoggedIn: data.isLoggedIn
+  }
 };
 
 const store = createStore(

@@ -6,7 +6,7 @@ import { Redirect, Route } from 'react-router-dom';
 const ProtectedRoute = ({component: Component, ...restProps}) => {
     const auth = useSelector(state => state.auth);
     
-    const isLoggedIn = auth.isLoggedIn || (getStorage('leafNowUser') && getStorage('leafNowUser').isLoggedIn);
+    const isLoggedIn = auth.isLoggedIn;
 
 return (<Route 
     {...restProps}

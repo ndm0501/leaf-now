@@ -12,7 +12,7 @@ export const userLogin = (user) => async (dispatch) => {
         type: actionTypes.USER_LOGIN_SUCCESS,
         payload: data,
       });
-      setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token});
+      setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token, isSellerOrDonor: data.isSellerOrDonor});
     } catch (error) {
       dispatch({
         type: actionTypes.USER_LOGIN_FAIL,

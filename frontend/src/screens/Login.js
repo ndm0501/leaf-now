@@ -22,7 +22,7 @@ const Login = ({location}) => {
   const authDetails = useSelector(state => state.auth);
   const { user } = authDetails;
 
-  const isLoggedIn = authDetails.isLoggedIn || (getStorage('leafNowUser') && getStorage('leafNowUser').isLoggedIn);
+  const isLoggedIn = authDetails.isLoggedIn;
   const prevPath = location.state && location.state.prevPath;
 
   useEffect(()=>{

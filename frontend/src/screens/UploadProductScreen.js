@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import "./UploadProductScreen.css";
 import {uploadProductDetails} from '../redux/actions/productActions';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 
 const UploadProductScreen = () => {
@@ -15,6 +16,14 @@ const UploadProductScreen = () => {
     isDonation: true,
   });
   const dispatch = useDispatch();
+  const history = useHistory();
+  const authDetails = useSelector(state => state.auth);
+
+  useEffect(()=>{
+    if(authDetails.user && !authDetails.user.isSellerOrDonor){
+      history.push('/');
+    }
+  });
 
   const handleChange = (e) => {
     if (e.target.id === "isDonation") {

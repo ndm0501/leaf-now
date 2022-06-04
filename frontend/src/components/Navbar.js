@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "./Button";
 import { userLogout } from "../redux/actions/authActions";
 import BrandLogo from "../assets/icons/leaf-now.svg";
+import { getStorage } from "../utils/storage";
 
 const Navbar = ({ click, location }) => {
   const cart = useSelector((state) => state.cart);
