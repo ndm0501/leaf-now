@@ -8,7 +8,7 @@ const getProducts = async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Error fetching products" });
   }
 };
 
@@ -19,14 +19,17 @@ const getProductById = async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Error getting product details" });
   }
 };
 
 const uploadProduct = async (req, res) => {
   try{
 
-    const { name, description, countInStock, price } = req.fields;
+    const { name, description, countInStock, price, isDonation = false, } = req.fields;
+    
+    const { userId } = req.session;
+
     const { file } = req.files;
     
     await cloudinary.uploader.upload(
@@ -38,22 +41,31 @@ const uploadProduct = async (req, res) => {
           let newProduct = new Product({
             name: name,
             description: description,
-            price: price,
+            price: isDonation? 0 : price,
             countInStock: countInStock,
             imageUrl: result.secure_url,
             imageId: result.public_id,
+            sellerOrDonorId: userId,
+            isDonation: isDonation,
           });
           const savedProduct = await newProduct.save();
           return res.status(201).json({
             message:"Product added successfully",
-            ...savedProduct
+            name: name,
+            description: description,
+            price: isDonation? 0 : price,
+            countInStock: countInStock,
+            imageUrl: result.secure_url,
+            imageId: result.public_id,
+            sellerOrDonorId: userId,
+            isDonation: isDonation,
           })
         }else{
           return res.status(503).json({
             message: "Error uploading image"
           })
         }
-    })
+    });
   }catch(e){
     return res.status(500).json({
       message:  "Error uploading product details"
@@ -64,11 +76,11 @@ const uploadProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try{
     const { productId = '' } = req.params;
-    const { name = '', description = '', countInStock = '', price = '' } = req.fields;
+    const { name = '', description = '', countInStock = '', price = '', sellerOrDonorId='' } = req.fields;
     const { file = {} } = req.files || {};
     
     let product = await Product.findById(productId);
-    
+
     if(product.imageId){
       console.log(product.imageId)
       await cloudinary.uploader.destroy(product.imageId);
@@ -146,7 +158,7 @@ const deleteProduct = async (req, res) => {
     await cloudinary.uploader.destroy(product.imageId);
     await product.remove();
     return res.status(202).json({
-      message: "Product deleted"
+      message: "Product deleted successfully"
     });
   }catch(e){
     return res.status(500).json({

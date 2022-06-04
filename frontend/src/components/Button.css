@@ -1,0 +1,23 @@
+
+.button__primary{
+    background-color: #6cb41b !important;
+    color: white;
+    font-weight: 700;
+    border: 1px solid #6cb41b;
+}
+.button__primary:hover{
+    background-color: #55a50b !important;
+    border: 1px solid #55a50b !important;
+    color: white;
+}
+.button__secondary{
+    background-color: #ff6b6b !important;
+    color: white;
+    font-weight: 700;
+    border: 1px solid #ff6b6b;
+}
+.button__secondary:hover{
+    background-color: #f74848 !important;
+    border: 1px solid #f74848 !important;
+    color: white;
+}

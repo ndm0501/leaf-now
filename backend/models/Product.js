@@ -23,6 +23,14 @@ const productSchema = mongoose.Schema({
   },
   imageId:{
     type: String
+  },
+  isDonation:{
+    type: Boolean,
+    default: false
+  },
+  sellerOrDonorId:{
+    type: String,
+    required: true,
   }
 });
 

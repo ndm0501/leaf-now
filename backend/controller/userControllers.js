@@ -4,7 +4,7 @@ const JWT = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, verifyPassword } = req.body;
+    const { name, email, password, verifyPassword, isSellerOrDonor = false } = req.body;
     console.log(req.body);
 
     if (!name || !email || !password || !verifyPassword) {
@@ -30,15 +30,21 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      isSellerOrDonor: isSellerOrDonor,
     });
     const savedUser = await newUser.save();
     const token = JWT.sign({ id: savedUser._id }, process.env.JWT_SECRET);
+    
+    req.session.token = token;
+    req.session.userId = savedUser._id;
 
     return res.status(201).json({
       message: "Registered successfully",
       token: token,
       name: savedUser.name,
       email: savedUser.email,
+      userId: savedUser._id,
+      isSellerOrDonor: savedUser.isSellerOrDonor
     });
   } catch (e) {
     return res.status(500).json({ message: e.message || "Server Error" });
@@ -46,7 +52,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.fields;
+  const { email, password } = req.body;
 
   try {
     if (!email || !password) {
@@ -66,18 +72,49 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
     const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET);
+    
+    req.session.token = token;
+    req.session.userId = user._id;
+
     return res.status(200).json({
       message: "Logged in successfully",
       token: token,
       name: user.name,
       email: user.email,
+      userId: user._id,
     });
+
   } catch (e) {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (e) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+}
+
+const signout = async (req, res) => {
+  try {
+    req.session = null;
+    return res.status(200).send({
+      message: "You've been signed out"
+    });
+  } catch (e) {
+    // this.next(e);
+    return res.status(500).json({
+      message: "Something went wrong"
+    })
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  getAllUsers,
+  signout
 };

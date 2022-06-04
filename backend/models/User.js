@@ -10,17 +10,23 @@ const userSchema = mongoose.Schema({
     password:{
         type: String, required: true
     },
-    isSeller:{
-        type: Boolean
-    },
     isBuyer:{
-        type: Boolean
+        type: Boolean,
+        default: true
     },
     sales: {
         type: Array, default: []
     },
     messages: {
         type: Array, default: []
+    },
+    isSellerOrDonor: {
+        type: Boolean,
+        default: false,
+    },
+    address: {
+        type: String,
+        default: '',
     }
 })
 

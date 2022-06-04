@@ -1,0 +1,18 @@
+.loginscreen {
+    max-width: 1300px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+  }
+.loginscreen__formcontainer{
+    border: 1px solid #e7e7e7;
+    max-width: 500px;
+    padding: 16px;
+    width: 100%;
+}
+.loginscreen_form_header{
+    color: rgba(0,0,0,0.8);
+}

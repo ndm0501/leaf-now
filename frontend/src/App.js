@@ -1,6 +1,7 @@
+import React from 'react';
 import "./App.css";
 import { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -11,20 +12,25 @@ import Backdrop from "./components/Backdrop";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
+import Login from "./screens/Login";
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   const [sideToggle, setSideToggle] = useState(false);
+  const history = useHistory();
 
   return (
-    <Router>
+    <Router history={history}>
       <Navbar click={() => setSideToggle(true)} />
       <SideDrawer show={sideToggle} click={() => setSideToggle(false)} />
       <Backdrop show={sideToggle} click={() => setSideToggle(false)} />
       <main className="app">
         <Switch>
           <Route exact path="/" component={HomeScreen} />
+          <Route exact path="/login" component={Login} />
           <Route exact path="/product/:id" component={ProductScreen} />
-          <Route exact path="/cart" component={CartScreen} />
+          <ProtectedRoute exact path="/cart" component={CartScreen} />
         </Switch>
       </main>
     </Router>
