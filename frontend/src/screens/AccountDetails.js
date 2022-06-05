@@ -13,9 +13,9 @@ const AccountDetails = () => {
     address: "",
     isSellerOrDonor: "",
   });
-  useEffect(() => {
+
+  useEffect(async () => {
     dispatch(getCurrentUser());
-    console.log('asaaaa',user)
   }, []);
 
   const handleChange = (e) => {
@@ -23,9 +23,9 @@ const AccountDetails = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(state)
-    // dispatch(updateUser())
+    console.log(state);
   }
+  console.log('asaaaa',state);
   return (
     <div className="account__details">
       <div className="form__container">

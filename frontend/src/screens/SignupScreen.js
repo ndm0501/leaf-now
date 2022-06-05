@@ -11,6 +11,7 @@ import Button from "../components/Button";
 // Actions
 import { userSignup } from "../redux/actions/authActions";
 import { getStorage } from "../utils/storage";
+import { validateRegisterInput } from "../utils/validator";
 
 const SignupScreen = ({ location }) => {
   const [state, setState] = useState({
@@ -21,6 +22,7 @@ const SignupScreen = ({ location }) => {
     address: "",
     isSellerOrDonor: true,
   });
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const history = useHistory();
   const authDetails = useSelector((state) => state.auth);
@@ -49,7 +51,13 @@ const SignupScreen = ({ location }) => {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    dispatch(userSignup(state))
+    const {errors, isValid} = validateRegisterInput(state)
+    setErrors(errors);
+    
+    if(isValid){
+      dispatch(userSignup(state))
+    }
+    
   };
   const handleChange = (e) => {
       if(e.target.id === 'isSellerOrDonor'){
@@ -83,6 +91,7 @@ const SignupScreen = ({ location }) => {
               name="name"
               onChange={handleChange}
             />
+            {errors['name'] && <small className="text text-danger">{errors['name']}</small>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email address</label>
@@ -95,6 +104,7 @@ const SignupScreen = ({ location }) => {
               name="email"
               onChange={handleChange}
             />
+            {errors['email'] && <small className="text text-danger">{errors['email']}</small>}
             <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
@@ -109,17 +119,19 @@ const SignupScreen = ({ location }) => {
               name="password"
               onChange={handleChange}
             />
+            {errors['password'] && <small className="text text-danger">{errors['password']}</small>}
           </div>
           <div className="form-group">
             <label htmlFor="verifyPassword">Re-enter password</label>
             <input
-              type="verifyPassword"
+              type="password"
               className="form-control"
               id="verifyPassword"
               value={state.verifyPassword}
               name="verifyPassword"
               onChange={handleChange}
             />
+            {errors['password'] && <small className="text text-danger">{errors['password']}</small>}
           </div>
           <div className="form-group form-check">
             <input

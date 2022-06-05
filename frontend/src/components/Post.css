@@ -1,6 +1,5 @@
 .post__screen{
     padding: 20px;
-    border: 1px solid #f7f7f7;
     margin: 10px;
 }
 .header{
@@ -13,6 +12,8 @@
 }
 .comment__section{
     border-bottom: 0.5px solid #f7f7f7;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 .user__avatar{
     color: white;

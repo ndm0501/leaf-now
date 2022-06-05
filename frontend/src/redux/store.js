@@ -49,6 +49,7 @@ const INITIAL_STATE = {
       token: data.authToken,
       userId: data.userId,
       isSellerOrDonor: data.isSellerOrDonor,
+      name:data.name
     },
     isLoggedIn: data.isLoggedIn,
   },

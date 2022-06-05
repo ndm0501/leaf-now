@@ -20,7 +20,7 @@ import DiscussionScreen from './screens/DiscussionScreen';
 import AddPostScreen from './screens/AddPostScreen';
 import AccountDetails from './screens/AccountDetails';
 import Post from './components/Post';
-
+import NotFound from './components/NotFound';
 
 function App() {
   const [sideToggle, setSideToggle] = useState(false);
@@ -42,7 +42,8 @@ function App() {
           <ProtectedRoute exact path="/add-post" component={AddPostScreen}/>
           <ProtectedRoute exact path="/cart" component={CartScreen} />
           <ProtectedRoute exact path="/sell-donate" component={UploadProductScreen} />
-          <ProtectedRoute exact path="/my-account" component={AccountDetails} />
+          {/* <ProtectedRoute exact path="/my-account" component={AccountDetails} /> */}
+          <Route component={NotFound} />
         </Switch>
       </main>
     </Router>

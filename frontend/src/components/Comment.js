@@ -7,16 +7,19 @@ const Comment = ({ postId, name, date, text, commentId }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const handleDeleteComment = () => {
+      debugger
         dispatch(deleteComment(postId, commentId));
-        /**  */
-        window.location.reload();
+        setTimeout(()=>{
+          window.location.reload();
+        },1000)
+        
     }
     const commentDetails = useSelector((state) => state.deleteComment);
     const {comments} = commentDetails;
 
   return (
     <div className="d-flex mt-1 comment__section">
-      <div className="user__avatar">A</div>
+      <div className="user__avatar">{name[0]}</div>
       <div className="w-100 ml-2">
         <div className="d-flex justify-content-between">
           <div>

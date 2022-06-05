@@ -84,7 +84,7 @@ export const addCommentReducer = (
   state = {comments:[], loading: true},
   action
   ) => {
-    debugger
+    
     switch (action.type) {
       case actionTypes.ADD_COMMENT_REQUEST:
         return { ...state };

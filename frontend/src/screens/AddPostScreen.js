@@ -3,13 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Button from "../components/Button";
 import { addDiscussion } from "../redux/actions/discussionActions";
+import { validateDiscussionPostInput } from "../utils/validator";
 import "./AddPostScreen.css";
+
 
 const AddPostScreen = () => {
   const [state, setState] = useState({
     title: "",
     text: "",
   });
+  const [errors, setErrors] = useState({});
+
   const history = useHistory();
   const dispatch = useDispatch();
   const addDiscussionDetails = useSelector((state) => state.addDiscussion);
@@ -19,11 +23,14 @@ const AddPostScreen = () => {
   }
   const handlePublish = (e) => {
     e.preventDefault();
-    dispatch(addDiscussion(state));
-    setTimeout(()=>{
-      history.push('/discussions')
-    },100);
-    
+    const {errors, isValid} = validateDiscussionPostInput(state);
+    debugger
+    if(isValid){
+      dispatch(addDiscussion(state));
+      setTimeout(()=>{
+        history.push('/discussions')
+      },100);
+    }
   }
 
   return (

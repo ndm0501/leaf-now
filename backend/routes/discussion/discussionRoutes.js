@@ -15,7 +15,7 @@ router.delete('/:discussionId',verifyToken, isAuthor, deletePost);
 router.post('/upvote/:discussionId',verifyToken, upvoteDiscussion);
 router.post('/downvote/:discussionId',verifyToken, downvoteDiscussion);
 router.post('/comment/:discussionId',verifyToken, addComment);
-router.delete('/comment/:discussionId/:comment_id',verifyToken, isAuthor,  deleteComment);
+router.delete('/comment/:discussionId/:comment_id', verifyToken, isCommenter,  deleteComment);
 
 
 module.exports = router;

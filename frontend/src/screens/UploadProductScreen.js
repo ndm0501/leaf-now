@@ -4,21 +4,22 @@ import "./UploadProductScreen.css";
 import {uploadProductDetails} from '../redux/actions/productActions';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { validateEmail, validateNumerics } from "../utils/validator";
+import { validateEmail, validateNumerics, validateProductUploadInput } from "../utils/validator";
 
 
 const UploadProductScreen = () => {
   const [state, setState] = useState({
     name: "",
-    countInStock: "",
+    countInStock: 0,
     description: "",
     file: "",
-    price: "",
+    price: 0,
     isDonation: true,
   });
   const dispatch = useDispatch();
   const history = useHistory();
   const authDetails = useSelector(state => state.auth);
+  const [errors, setErrors] = useState({});
 
   useEffect(()=>{
     if(authDetails.user && !authDetails.user.isSellerOrDonor){
@@ -45,7 +46,11 @@ const UploadProductScreen = () => {
     // for (let name in state) {
     //   console.log(formData.get(name))
     // }
-    dispatch(uploadProductDetails(formData));
+    const {errors, isValid} = validateProductUploadInput(formData);
+    setErrors(errors);
+    if(isValid){
+      dispatch(uploadProductDetails(formData));
+    }
   }
   
   return (
@@ -64,6 +69,7 @@ const UploadProductScreen = () => {
               onChange={handleChange}
               required
             />
+            {errors['name'] && <small className="text text-danger">{errors['name']}</small>}
           </div>
 
           <div className="form-group">
@@ -78,6 +84,7 @@ const UploadProductScreen = () => {
               onChange={handleChange}
               required
             />
+            {errors['countInStock'] && <small className="text text-danger">{errors['countInStock']}</small>}
           </div>
 
           <div className="form-group">
@@ -91,6 +98,7 @@ const UploadProductScreen = () => {
               onChange={handleChange}
               required
             ></textarea>
+            {errors['description'] && <small className="text text-danger">{errors['description']}</small>}
           </div>
 
           <div className="form-group">
@@ -117,6 +125,7 @@ const UploadProductScreen = () => {
               onChange={handleChange}
               disabled={state.isDonation}
             />
+            {errors['price'] && <small className="text text-danger">{errors['price']}</small>}
             <small id="priceHelp" className="form-text text-muted">
               To add price uncheck the below donation option
             </small>

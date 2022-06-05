@@ -12,11 +12,15 @@ import Button from '../components/Button';
 import { userLogin } from '../redux/actions/authActions';
 import { getStorage } from "../utils/storage";
 
+//validator
+import {validateLoginInput} from '../utils/validator';
+
 const Login = ({location}) => {
   const [state, setState] = useState({
     email:'',
     password:'',
-  })
+  });
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const history = useHistory();
   const authDetails = useSelector(state => state.auth);
@@ -43,12 +47,17 @@ const Login = ({location}) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(userLogin(state))
+    const {errors, isValid} = validateLoginInput(state);
+    setErrors(errors);
+    if(isValid){
+      dispatch(userLogin(state));
+    }
+    
   }
   const handleChange = (e) => {
     setState(state =>({...state, [e.target.name]: e.target.value}));
   }
-  
+  console.log(errors)
   return (
     <div className="loginscreen">
       <div className="loginscreen__formcontainer">
@@ -72,6 +81,7 @@ const Login = ({location}) => {
               name="email"
               onChange={handleChange}
             />
+            {errors['email'] && <small className="text text-danger">{errors['email']}</small>}
             <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
@@ -86,6 +96,7 @@ const Login = ({location}) => {
               name="password"
               onChange={handleChange}
             />
+            {errors['password'] && <small className="text text-danger">{errors['password']}</small>}
           </div>
           <Button label="Login" type="primary" onClick={handleLogin}/>
         </form>

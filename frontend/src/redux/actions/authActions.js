@@ -12,7 +12,7 @@ export const userLogin = (user) => async (dispatch) => {
         type: actionTypes.USER_LOGIN_SUCCESS,
         payload: data,
       });
-      setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token, isSellerOrDonor: data.isSellerOrDonor});
+      setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token, isSellerOrDonor: data.isSellerOrDonor, name: data.name});
     } catch (error) {
       dispatch({
         type: actionTypes.USER_LOGIN_FAIL,
@@ -57,7 +57,7 @@ export const userLogin = (user) => async (dispatch) => {
           type: actionTypes.USER_SIGNUP_SUCCESS,
           payload: data,
         });
-        setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token});
+        setStorage('leafNowUser', {isLoggedIn: true, userId:data.userId, authToken: data.token, name: data.name});
       }
     }catch(error){
       dispatch({

@@ -1,0 +1,17 @@
+.notfound__screen{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    height: 100%;
+}
+.not__found{
+    width: 700px;
+    border: 1px solid #6cb41b;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}

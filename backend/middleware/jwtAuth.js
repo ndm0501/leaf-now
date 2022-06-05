@@ -99,10 +99,41 @@ isAuthor = async (req, res, next) => {
     });
   }
 };
+isCommenter = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User doesn't exist",
+      });
+    }
+
+    const { discussionId = "" } = req.params;
+    let discussion = await Discussion.findById(discussionId);
+
+    if (!discussion) {
+      return res.status(404).json({
+        message: "The article does not exist",
+      });
+    }
+    const comment = discussion && discussion.comments && discussion.comments.find((comment)=> comment.user == user.id)
+    if (comment) {
+      return next();
+    }
+    return res.status(403).json({
+      message: "You are not auhtorized to perform this operation",
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "Unable to validate user",
+    });
+  }
+}
 const authJwt = {
   verifyToken,
   isSellerOrDonor,
   isSellerOrDonorAuthorized,
   isAuthor,
+  isCommenter,
 };
 module.exports = authJwt;

@@ -9,6 +9,8 @@ import {
 import Button from "./Button";
 import "./Post.css";
 import Comment from "./Comment";
+import { validateCommentInput } from "../utils/validator";
+import { getCurrentUser } from "../redux/actions/userActions";
 
 const Post = ({ match }) => {
   const dispatch = useDispatch();
@@ -16,13 +18,16 @@ const Post = ({ match }) => {
   const discussionDetails = useSelector((state) => state.getDiscussionPost);
   const commentDetails = useSelector((state) => state.deleteComment);
   const authDetails = useSelector((state) => state.auth);
+
   const { loading, error, discussion } = discussionDetails;
   const { user } = authDetails;
   const [comment, setComment] = useState({ text: "" });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (discussion && match.params.id !== discussion._id) {
       dispatch(getDiscussionPost(match.params.id));
+      dispatch(getCurrentUser());
     }
   }, [dispatch, match, discussion,commentDetails.comments]);
 
@@ -30,15 +35,19 @@ const Post = ({ match }) => {
     dispatch(deleteDiscussion(id));
     setTimeout(()=>{
       history.push("/discussions");
-    }, 100)
+    }, 1000)
     
   };
 
   const handleComment = (id) => {
-    dispatch(addComment(id, comment));
-    setTimeout(()=>{
-      window.location.reload()
-    },100)
+    const {errors, isValid} = validateCommentInput(comment);
+    setErrors(errors);
+    if(isValid){
+      dispatch(addComment(id, comment));
+      setTimeout(()=>{
+        window.location.reload()
+      },1000);
+    }
   };
 
   const { name, title, text, date, likes = [], comments = [] } = discussion;
@@ -75,7 +84,7 @@ const Post = ({ match }) => {
       </div>
       <div className="content mt-5">{text}</div>
       <div className="d-flex mt-5 mb-5">
-        <div className="user__avatar username_avatar">A</div>
+        <div className="user__avatar username_avatar">{user && user.name && user.name[0]}</div>
         <div className="d-flex w-100 ">
           <form className="w-100 ml-2">
             <div className="form-group ">
@@ -89,6 +98,7 @@ const Post = ({ match }) => {
                   setComment((state) => ({ ...state, text: e.target.value }))
                 }
               ></textarea>
+              {errors['comment'] && <small className="text text-danger">{errors['comment']}</small>}
             </div>
             <Button
               type="tertiary"
