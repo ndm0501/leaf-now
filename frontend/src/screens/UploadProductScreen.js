@@ -4,6 +4,7 @@ import "./UploadProductScreen.css";
 import {uploadProductDetails} from '../redux/actions/productActions';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { validateEmail, validateNumerics } from "../utils/validator";
 
 
 const UploadProductScreen = () => {
@@ -36,6 +37,7 @@ const UploadProductScreen = () => {
   };
   const handleUpload = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     for (let name in state) {
       formData.append(name, state[name]);
@@ -44,16 +46,15 @@ const UploadProductScreen = () => {
     //   console.log(formData.get(name))
     // }
     dispatch(uploadProductDetails(formData));
-
   }
-  console.log(state)
+  
   return (
     <div className="uploadscreen__container">
       <div className="uploadscreen__contents">
         <h3>Add product details</h3>
         <form>
           <div className="form-group">
-            <label htmlFor="name">Product name</label>
+            <label htmlFor="name">Product name<sup>*</sup></label>
             <input
               type="text"
               className="form-control"
@@ -61,23 +62,26 @@ const UploadProductScreen = () => {
               name="name"
               value={state.name}
               onChange={handleChange}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="countInStock">Total count in current stock</label>
+            <label htmlFor="countInStock">Total count in current stock<sup>*</sup></label>
             <input
               type="text"
               className="form-control"
+              pattern="^[1-9][0-9]*$"
               id="countInStock"
               name="countInStock"
               value={state.countInStock}
               onChange={handleChange}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Product description</label>
+            <label htmlFor="description">Product description<sup>*</sup></label>
             <textarea
               className="form-control"
               id="description"
@@ -85,6 +89,7 @@ const UploadProductScreen = () => {
               name="description"
               value={state.description}
               onChange={handleChange}
+              required
             ></textarea>
           </div>
 
@@ -105,11 +110,16 @@ const UploadProductScreen = () => {
             <input
               type="text"
               className="form-control"
+              pattern="^[1-9][0-9]*$"
               id="price"
               value={state.price}
               name="price"
               onChange={handleChange}
+              disabled={state.isDonation}
             />
+            <small id="priceHelp" className="form-text text-muted">
+              To add price uncheck the below donation option
+            </small>
           </div>
           <div className="form-group form-check">
             <input

@@ -1,0 +1,31 @@
+.post__screen{
+    padding: 20px;
+    border: 1px solid #f7f7f7;
+    margin: 10px;
+}
+.header{
+    width: 100%;
+    justify-content: space-between;
+}
+
+.header_desc{
+    justify-content: space-between;
+}
+.comment__section{
+    border-bottom: 0.5px solid #f7f7f7;
+}
+.user__avatar{
+    color: white;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+.username_avatar{
+    background-color: #ff6b6b;
+}
+.comment__delete{
+    cursor: pointer;
+    padding: 5px;
+}

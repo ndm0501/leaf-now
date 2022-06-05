@@ -9,10 +9,10 @@ const registerUser = async (req, res) => {
     if (!name || !email || !password || !verifyPassword) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    if (password.length < 8) {
+    if (password.length < 6) {
       return res
         .status(400)
-        .json({ message: "Password must be atleast 8 characters" });
+        .json({ message: "Password must be atleast 6 characters" });
     }
     if (password !== verifyPassword) {
       return res.status(400).json({ message: "Passwords must match" });
@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
       isSellerOrDonor: savedUser.isSellerOrDonor
     });
   } catch (e) {
-    return res.status(500).json({ message: e.message || "Server Error" });
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -89,12 +89,59 @@ const loginUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { name,  isSellerOrDonor = false, address } = req.body;
+
+    if (!name ||  !address) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    let user = await User.findById(req.session.userId);
+   
+    if (user) {
+      const updatedUser = {
+        name: name || user.name,
+        email: user.email,
+        password: user.password,
+        verifyPassword: user.verifyPassword,
+        address: address || user.address,
+        isSellerOrDonor: !!isSellerOrDonor,
+      }
+
+       user = await User.findByIdAndUpdate(req.session.userId,updatedUser,{new: true});
+       console.log(user)
+      return res.status(201).json({
+        message: "Registered successfully",
+        name: user.name,
+        email: user.email,
+        userId: user._id,
+        isSellerOrDonor: user.isSellerOrDonor,
+        address: user.address,
+      });
+    }
+    return res.status(404).json({
+      message: "The user doesn't exist"
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
     res.json(users);
   } catch (e) {
     return res.status(500).json({ message: "Server Error" });
+  }
+}
+const getCurrentUser = async (req, res) => {
+  try{
+    const user = await User.findById(req.session.userId);
+    res.json(user);
+  }catch(e){
+    return res.status(500).json({message:"Server Error"})
   }
 }
 
@@ -116,5 +163,7 @@ module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
-  signout
+  signout,
+  updateUser,
+  getCurrentUser
 };

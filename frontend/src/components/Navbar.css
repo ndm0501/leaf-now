@@ -103,15 +103,27 @@
 }
 
 .hamburger__menu:hover > div {
-  background: #dd219e;
+  background: #55a50b;
 }
 
 .hamburger__menu > div {
   width: 100%;
-  height: 3px;
+  height: 5px;
   background: #f4f4f4;
 }
+.discussion{
+  flex-direction: row;
+  align-items: center;
+}
+.discussion__forum__link{
+  color: #ff6b6b;
+  font-weight: 800;
+  margin: 0 10px;
+}
+.discussion__forum__link:hover{
 
+  color: #55a50b;
+}
 @media (max-width: 960px) {
   .navbar__links {
     display: none;

@@ -16,6 +16,10 @@ import Login from "./screens/Login";
 import SignupScreen from "./screens/SignupScreen";
 import UploadProductScreen from "./screens/UploadProductScreen";
 import ProtectedRoute from './components/ProtectedRoute';
+import DiscussionScreen from './screens/DiscussionScreen';
+import AddPostScreen from './screens/AddPostScreen';
+import AccountDetails from './screens/AccountDetails';
+import Post from './components/Post';
 
 
 function App() {
@@ -33,8 +37,12 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignupScreen} />
           <Route exact path="/product/:id" component={ProductScreen} />
+          <Route exact path="/discussions" component={DiscussionScreen} />
+          <Route exact path="/discussions/:id" component={Post} />
+          <ProtectedRoute exact path="/add-post" component={AddPostScreen}/>
           <ProtectedRoute exact path="/cart" component={CartScreen} />
           <ProtectedRoute exact path="/sell-donate" component={UploadProductScreen} />
+          <ProtectedRoute exact path="/my-account" component={AccountDetails} />
         </Switch>
       </main>
     </Router>

@@ -24,3 +24,21 @@
     border: 1px solid #f74848 !important;
     color: white;
 }
+.button__tertiary{
+    border: 1px solid #6cb41b;
+    color: #6cb41b;
+    
+}
+.button__tertiary:hover{
+    border: 1px solid #55a50b;
+    color: #55a50b;
+    background-color:#f6faf2;
+}
+.button__quaternary{
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+}
+.button__quaternary:hover{
+    border: 1px solid #f74848;
+    color: #f74848;
+}

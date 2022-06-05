@@ -9,6 +9,40 @@
   flex-direction: column;
   justify-content: space-between;
   flex-direction: column;
+  
+}
+
+.product__donation{
+  position: relative;
+}
+
+.product__donation::before{
+  position: absolute;
+  content: '';
+  background: #283593;
+  background: #316a02;
+  
+  height: 28px;
+  width: 28px;
+  /* Added lines */
+  top:2rem;
+  right:-0.5rem;
+  transform : rotate(45deg);
+}
+
+.product__donation::after{
+  position: absolute;
+  content: 'Donation';
+  top: 11px;
+  right: -14px;
+  padding: 0.5rem;
+  width: 8rem;
+  background: #3949ab;
+  background: #3d8106;
+  color: white;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 4px 4px 15px rgba(26, 35, 126, 0.2);
 }
 
 .product > img {

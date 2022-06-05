@@ -1,0 +1,14 @@
+.account__details{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.form__container{
+    width: 700px;
+    border: 1px solid #6cb41b;
+    padding: 20px;
+    border-radius: 5px;
+}
+.header{
+    border-bottom: 1px solid #f7f7f7;
+}

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const Discussion = require("../models/Discussion");
 
 verifyToken = (req, res, next) => {
   let token = req.session.token;
@@ -25,9 +26,9 @@ isSellerOrDonor = async (req, res, next) => {
     const user = await User.findById(req.userId);
 
     if (user.isSellerOrDonor) {
-        return next();
+      return next();
     }
-    
+
     return res.status(403).send({
       message: "You are not authorized to perform this operation",
     });
@@ -39,39 +40,69 @@ isSellerOrDonor = async (req, res, next) => {
 };
 
 isSellerOrDonorAuthorized = async (req, res, next) => {
-    try{
-        const user = await User.findById(req.session.userId);
-        if(!user){
-            return res.status(404).json({
-                message: "User doesn't exist"
-            });
-        }
-        const { productId = '' } = req.params;
-        let product = await Product.findById(productId);
-        
-        if(!product){
-            return res.status(404).json({
-                message: "The product doesn't exist or is already deleted"
-            });
-        }
-
-        if(product.sellerOrDonorId === user.id){
-            return next();
-        }
-        return res.status(403).json({
-            message: "Seller not authorized to perform this operation"
-        })
-
-    }catch(e){
-        return res.status(500).json({
-            message: "Unable to validate user"
-        })
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User doesn't exist",
+      });
     }
-}
+    const { productId = "" } = req.params;
+    let product = await Product.findById(productId);
 
+    if (!product) {
+      return res.status(404).json({
+        message: "The product doesn't exist or is already deleted",
+      });
+    }
+
+    if (product.sellerOrDonorId === user.id) {
+      return next();
+    }
+    return res.status(403).json({
+      message: "Seller not authorized to perform this operation",
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "Unable to validate user",
+    });
+  }
+};
+
+isAuthor = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User doesn't exist",
+      });
+    }
+
+    const { discussionId = "" } = req.params;
+    let discussion = await Discussion.findById(discussionId);
+
+    if (!discussion) {
+      return res.status(404).json({
+        message: "The article does not exist",
+      });
+    }
+    
+    if (discussion.user == user.id) {
+      return next();
+    }
+    return res.status(403).json({
+      message: "You are not auhtorized to perform this operation",
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "Unable to validate user",
+    });
+  }
+};
 const authJwt = {
-    verifyToken,
-    isSellerOrDonor,
-    isSellerOrDonorAuthorized
-  };
-  module.exports = authJwt;
+  verifyToken,
+  isSellerOrDonor,
+  isSellerOrDonorAuthorized,
+  isAuthor,
+};
+module.exports = authJwt;

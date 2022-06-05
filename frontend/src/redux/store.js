@@ -5,23 +5,39 @@ import { composeWithDevTools } from "redux-devtools-extension";
 // Reducers
 import { cartReducer } from "./reducers/cartReducers";
 import { authReducers } from "./reducers/authReducers";
+import { userReducers } from "./reducers/userReducers";
+import {
+  discussionReducers,
+  getDiscussionReducer,
+  addDiscussionReducer,
+  addCommentReducer,
+  deleteCommentReducer,
+} from "./reducers/discussionReducers";
+
 import {
   getProductsReducer,
   getProductDetailsReducer,
+  uploadProductDetailsReducer,
 } from "./reducers/productReducers";
 import { getStorage } from "../utils/storage";
-
 
 const reducer = combineReducers({
   cart: cartReducer,
   getProducts: getProductsReducer,
   getProductDetails: getProductDetailsReducer,
+  uploadProductDetails: uploadProductDetailsReducer,
   auth: authReducers,
+  discussions: discussionReducers,
+  getDiscussionPost: getDiscussionReducer,
+  addDiscussion: addDiscussionReducer,
+  addComment: addCommentReducer,
+  deleteComment: deleteCommentReducer,
+  userDetails: userReducers,
 });
 
 const middleware = [thunk];
 
-const cartItemsInLocalStorage = getStorage("cart")|| [];
+const cartItemsInLocalStorage = getStorage("cart") || [];
 const data = getStorage("leafNowUser") || {};
 
 const INITIAL_STATE = {
@@ -29,9 +45,13 @@ const INITIAL_STATE = {
     cartItems: cartItemsInLocalStorage,
   },
   auth: {
-    user: {token:data.authToken, userId: data.userId, isSellerOrDonor: data.isSellerOrDonor},
-    isLoggedIn: data.isLoggedIn
-  }
+    user: {
+      token: data.authToken,
+      userId: data.userId,
+      isSellerOrDonor: data.isSellerOrDonor,
+    },
+    isLoggedIn: data.isLoggedIn,
+  },
 };
 
 const store = createStore(

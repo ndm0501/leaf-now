@@ -7,7 +7,7 @@ import { userLogout } from "../redux/actions/authActions";
 import BrandLogo from "../assets/icons/leaf-now.svg";
 import { getStorage } from "../utils/storage";
 
-const Navbar = ({ click, location }) => {
+const Navbar = ({ click, location, match }) => {
   const cart = useSelector((state) => state.cart);
   const authDetails = useSelector((state) => state.auth);
 
@@ -21,19 +21,30 @@ const Navbar = ({ click, location }) => {
 
   const handleLogout = () => {
     dispatch(userLogout());
-    history.push("/login");
+    setTimeout(()=>{
+      history.push("/login");
+    },100)
+    
   };
+  
   const handleSignup = () => {
     dispatch(userLogout());
-    history.push("/signup");
+    setTimeout(()=>{
+      history.push("/signup");
+    },100)
   };
+
   const handleLogin = () => {
     dispatch(userLogout());
-    history.push("/login");
+    setTimeout(()=>{
+      history.push("/login");
+    }, 100)
   };
+  
   const handleSellOrDonate = () => {
     history.push("/sell-donate")
   }
+  
   const renderActionButton = () => {
     if (location.pathname === "/login") {
       return (
@@ -61,11 +72,26 @@ const Navbar = ({ click, location }) => {
   };
   const isLoggedIn = authDetails.isLoggedIn;
   const isSellerOrDonor = authDetails.user && authDetails.user.isSellerOrDonor;
+  const isDiscussionsPage = location && location.pathname && location.pathname.indexOf('discussions') !== -1;
 
   return (
     <nav className="navbar">
-      <div className="navbar__logo">
-        <img src={BrandLogo} width={50} height={50} alt="Brand Logo"/>
+      <div className="d-flex">
+        <div className="navbar__logo">
+          <img src={BrandLogo} width={50} height={50} alt="Brand Logo"/>
+        </div>
+        <div className="discussion ml-5 d-flex">
+          <Link to="/" className="discussion__forum__link">
+            Home
+          </Link>
+          <Link to="/discussions" className="discussion__forum__link">
+            Discussions
+          </Link>
+          {isDiscussionsPage && <div className="ml-2 d-none d-md-block">
+            <Button type="quaternary" label="Add Post" onClick={() => history.push('/add-post')} />
+          </div>
+          }
+        </div>
       </div>
 
       <ul className="navbar__links">
@@ -92,7 +118,7 @@ const Navbar = ({ click, location }) => {
             </li>
             <li>
               <Link to="/" className="user__avatar">
-                <i class="fas fa-solid fa-user"></i>
+                <i className="fas fa-solid fa-user"></i>
               </Link>
             </li>
 
