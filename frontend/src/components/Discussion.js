@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {  useDispatch, useSelector } from "react-redux";
 import {  useHistory } from "react-router-dom";
 import { upvotePost, downvotePost } from "../redux/actions/discussionActions";
@@ -18,6 +18,9 @@ const Discussion = ({
     const userDetails = useSelector(state => state.userDetails);
     const { user } = userDetails;
     const alreadyUpvoted = likes && likes.find(like => like.user == user._id ? true: false);
+    useEffect(()=>{
+
+    }, [dispatch, alreadyUpvoted])
 
     const history = useHistory();
     const handleReadClick = (id) => {

@@ -39,7 +39,7 @@ const Post = ({ match }) => {
       dispatch(getDiscussionPost(match.params.id));
       dispatch(getCurrentUser());
     }
-  }, [dispatch, match, discussion._id, discussion.likes]);
+  }, [dispatch, match, discussion._id, discussion.likes, alreadyUpvoted]);
 
   const handleDelete = (id) => {
     dispatch(deleteDiscussion(id));
