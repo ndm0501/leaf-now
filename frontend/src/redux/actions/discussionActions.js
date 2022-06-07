@@ -127,4 +127,27 @@ export const deleteComment = (discussionId, commentId) => async (dispatch) => {
           : error.message,
     });
   }
+};
+
+export const upvotePost = (id) => async (dispatch) => {
+  try{
+    const { data } = await axios.post(`/api/discussions/upvote/${id}`);
+    dispatch({
+      type: actionTypes.VOTE_DISCUSSION_SUCCESS,
+      payload: {id: id, data: data},
+    });
+  }catch(error){
+
+  }
+}
+export const downvotePost = (id) => async (dispatch) => {
+  try{
+    const { data } = await axios.post(`/api/discussions/downvote/${id}`);
+    dispatch({
+      type: actionTypes.VOTE_DISCUSSION_SUCCESS,
+      payload: {id: id, data: data},
+    });
+  }catch(error){
+
+  }
 }

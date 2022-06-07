@@ -13,7 +13,7 @@ const getDiscussionById = async (req, res) => {
   try {
     const post = await Discussion.findById(req.params.discussionId);
     if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ message: 'Post not found' });
     }
     return res.json(post);
   } catch (err) {
@@ -48,9 +48,13 @@ const upvoteDiscussion = async (req, res) => {
   try {
     const post = await Discussion.findById(req.params.discussionId);
 
+    if(!post){
+      return res.status(404).json({message: 'Discussion not found'})
+    }
+
     // Check if the post has already been liked
     if (post.likes.some((like) => like.user.toString() === req.session.userId)) {
-      return res.status(400).json({ msg: 'Post already liked' });
+      return res.status(400).json({ message: 'Post already liked' });
     }
 
     post.likes.unshift({ user: req.session.userId });
@@ -68,9 +72,13 @@ const downvoteDiscussion = async (req, res) => {
   try {
     const post = await Discussion.findById(req.params.discussionId);
 
+    if(!post){
+      return res.status(404).json({message: 'Discussion not found'})
+    }
+    
     // Check if the post has not yet been liked
     if (!post.likes.some((like) => like.user.toString() === req.session.userId)) {
-      return res.status(400).json({ msg: 'Post has not yet been liked' });
+      return res.status(400).json({ message: 'Post has not yet been liked' });
     }
 
     // remove the like
@@ -124,11 +132,11 @@ const deleteComment = async (req, res) => {
     );
     // Make sure comment exists
     if (!comment) {
-      return res.status(404).json({ msg: 'Comment does not exist' });
+      return res.status(404).json({ message: 'Comment does not exist' });
     }
     // Check user
     if (comment.user.toString() !== req.session.userId) {
-      return res.status(401).json({ msg: 'User not authorized' });
+      return res.status(401).json({ message: 'User not authorized' });
     }
 
     post.comments = post.comments.filter(
@@ -148,17 +156,17 @@ const deletePost = async (req, res) => {
     const post = await Discussion.findById(req.params.discussionId);
 
     if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ message: 'Post not found' });
     }
 
     // Check user
     if (post.user.toString() !== req.session.userId) {
-      return res.status(401).json({ msg: 'User not authorized' });
+      return res.status(401).json({ message: 'User not authorized' });
     }
 
     await post.remove();
 
-    res.json({ msg: 'Post removed' });
+    res.json({ message: 'Post removed' });
   } catch (err) {
     console.error(err.message);
 

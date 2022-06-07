@@ -96,7 +96,7 @@ export const validateProductUploadInput = (formData) => {
     errors.name = "Product name is required";
   }
 
-  if (!validator.isLength(data.description, { min: 20, max: 800 })) {
+  if (!validator.isLength(data.description, { min: 20, max: 25000 })) {
     errors.description = "Description must have atleast 20 character";
   }
 
@@ -130,7 +130,7 @@ export const validateDiscussionPostInput = (data) => {
     errors.title = "Title is required";
   }
 
-  if (!validator.isLength(data.text, { min: 25, max: 100 })) {
+  if (!validator.isLength(data.text, { min: 25, max: 25000 })) {
     errors.text = "Article must have atleast 25 characters";
   }
 

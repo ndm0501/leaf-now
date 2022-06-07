@@ -5,6 +5,8 @@ import {
   deleteDiscussion,
   getDiscussionPost,
   addComment,
+  upvotePost,
+  downvotePost,
 } from "../redux/actions/discussionActions";
 import Button from "./Button";
 import "./Post.css";
@@ -16,40 +18,55 @@ const Post = ({ match }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const discussionDetails = useSelector((state) => state.discussions);
-  const authDetails = useSelector((state) => state.auth);
+  const userDetails = useSelector(state => state.userDetails);
 
-  const { loading, error, discussion ={} } = discussionDetails;
-  const { user } = authDetails;
+  const { loading, error, discussion = {} } = discussionDetails;
+  const { user } = userDetails;
+
+  const { name, title, text, date, likes = [], comments = [] } = discussion;
+  const alreadyUpvoted = likes && likes.find(like => like.user == user._id ? true: false);
+  const canDelete = (discussion && discussion.user) == (user && user._id);
+  
   const [comment, setComment] = useState({ text: "" });
   const [errors, setErrors] = useState({});
+  const [upvoted, setUpvoted] = useState(false);
+
 
   useEffect(() => {
     if (discussion && match.params.id !== discussion._id) {
+      
+      setUpvoted(alreadyUpvoted);
       dispatch(getDiscussionPost(match.params.id));
       dispatch(getCurrentUser());
     }
-  }, [dispatch, match, discussion._id]);
+  }, [dispatch, match, discussion._id, discussion.likes]);
 
   const handleDelete = (id) => {
     dispatch(deleteDiscussion(id));
-    
-    setTimeout(()=>{
-      alert('Discussion deleted successfully')
+
+    setTimeout(() => {
+      alert("Discussion deleted successfully");
       history.push("/discussions");
-    }, 500)
-    
+    }, 500);
   };
 
   const handleComment = (id) => {
-    const {errors, isValid} = validateCommentInput(comment);
+    const { errors, isValid } = validateCommentInput(comment);
     setErrors(errors);
-    if(isValid){
+    if (isValid) {
       dispatch(addComment(id, comment));
     }
   };
 
-  const { name, title, text, date, likes = [], comments = [] } = discussion;
-  const canDelete = (discussion && discussion.user) == (user && user.userId);
+  const handleUpvote = () =>{
+    if(upvoted){
+      alert("Already upvoted")
+    }
+    dispatch(upvotePost(discussion._id));
+  }
+  const handleDownvote = () =>{
+    dispatch(downvotePost(discussion._id));
+  }
 
   return (
     <div className="post__screen">
@@ -72,17 +89,26 @@ const Post = ({ match }) => {
           <small className="text-muted">By {name}</small>
           <small className="text-muted">{date}</small>
         </div>
-        <div className="">
+        <div className={`${upvoted && "upvote__red"}`}>
           <strong className="text">
             <i className="fas fa-solid fa-heart" />
             <span className="ml-2">{`${likes && likes.length} Likes`}</span>
           </strong>
         </div>
-        <div></div>
+        <div className="d-flex vote__actions">
+          <span className="px-2" onClick={handleUpvote}>
+            <i className="fas fa-thumbs-up"></i>
+          </span>
+          <span className="px-2" onClick={handleDownvote}>
+            <i className="fas fa-thumbs-down"></i>
+          </span>
+        </div>
       </div>
       <div className="content mt-5">{text}</div>
       <div className="d-flex mt-5 mb-5">
-        <div className="user__avatar username_avatar">{user && user.name && user.name[0]}</div>
+        <div className="user__avatar username_avatar">
+          {user && user.name && user.name[0]}
+        </div>
         <div className="d-flex w-100 ">
           <form className="w-100 ml-2">
             <div className="form-group ">
@@ -96,7 +122,9 @@ const Post = ({ match }) => {
                   setComment((state) => ({ ...state, text: e.target.value }))
                 }
               ></textarea>
-              {errors['comment'] && <small className="text text-danger">{errors['comment']}</small>}
+              {errors["comment"] && (
+                <small className="text text-danger">{errors["comment"]}</small>
+              )}
             </div>
             <Button
               type="tertiary"
@@ -109,16 +137,18 @@ const Post = ({ match }) => {
           </form>
         </div>
       </div>
-      {comments && comments.map((comment) => (
-        <Comment
-          date={comment.date}
-          name={comment.name}
-          text={comment.text}
-          key={comment._id}
-          commentId={comment._id}
-          postId={discussion._id}
-        />
-      ))}
+      {comments &&
+        comments.map((comment) => (
+          <Comment
+            date={comment.date}
+            name={comment.name}
+            text={comment.text}
+            key={comment._id}
+            commentId={comment._id}
+            postId={discussion._id}
+            userId={comment.user}
+          />
+        ))}
     </div>
   );
 };

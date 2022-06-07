@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./App.css";
 import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
@@ -21,11 +21,18 @@ import AddPostScreen from './screens/AddPostScreen';
 import AccountDetails from './screens/AccountDetails';
 import Post from './components/Post';
 import NotFound from './components/NotFound';
+import { getCurrentUser } from './redux/actions/userActions';
+import { useDispatch } from 'react-redux';
+
 
 function App() {
   const [sideToggle, setSideToggle] = useState(false);
   const history = useHistory();
-
+  const dispatch = useDispatch();
+  
+  useEffect(()=>{
+    dispatch(getCurrentUser());
+  }, [])
   return (
     <Router history={history}>
       <Navbar click={() => setSideToggle(true)} />

@@ -50,6 +50,17 @@ const UploadProductScreen = () => {
     setErrors(errors);
     if(isValid){
       dispatch(uploadProductDetails(formData));
+      setTimeout(()=>{
+        alert("Product updated successfully");
+        setState({
+          name: "",
+          countInStock: 0,
+          description: "",
+          file: "",
+          price: 0,
+          isDonation: true,
+        });
+      },500)
     }
   }
   

@@ -127,7 +127,7 @@ import * as actionTypes from "../constants/ActionTypes";
     GET_DISCUSSION_POST_SUCCESS,
     ADD_DISCUSSION_SUCCESS,
     DELETE_DISCUSSION_SUCCESS,
-    UOPVOTE_DISCUSSION_SUCCESS,
+    VOTE_DISCUSSION_SUCCESS,
     ADD_COMMENT_SUCCESS,
     DELETE_COMMENT_SUCCESS,
   } from '../constants/ActionTypes';
@@ -174,11 +174,12 @@ import * as actionTypes from "../constants/ActionTypes";
           error: payload,
           loading: false
         };
-      case UOPVOTE_DISCUSSION_SUCCESS:
+      case VOTE_DISCUSSION_SUCCESS:
+        debugger
         return {
           ...state,
           discussions: state.discussions.map((discussion) =>
-            discussion._id === payload.id ? { ...discussion, likes: payload.likes } : discussion
+            discussion._id === payload.id ? { ...discussion, likes: payload.data } : discussion
           ),
           loading: false
         };
