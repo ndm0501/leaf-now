@@ -15,11 +15,10 @@ import { getCurrentUser } from "../redux/actions/userActions";
 const Post = ({ match }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const discussionDetails = useSelector((state) => state.getDiscussionPost);
-  const commentDetails = useSelector((state) => state.deleteComment);
+  const discussionDetails = useSelector((state) => state.discussions);
   const authDetails = useSelector((state) => state.auth);
 
-  const { loading, error, discussion } = discussionDetails;
+  const { loading, error, discussion ={} } = discussionDetails;
   const { user } = authDetails;
   const [comment, setComment] = useState({ text: "" });
   const [errors, setErrors] = useState({});
@@ -29,13 +28,15 @@ const Post = ({ match }) => {
       dispatch(getDiscussionPost(match.params.id));
       dispatch(getCurrentUser());
     }
-  }, [dispatch, match, discussion,commentDetails.comments]);
+  }, [dispatch, match, discussion._id]);
 
   const handleDelete = (id) => {
     dispatch(deleteDiscussion(id));
+    
     setTimeout(()=>{
+      alert('Discussion deleted successfully')
       history.push("/discussions");
-    }, 1000)
+    }, 500)
     
   };
 
@@ -44,9 +45,6 @@ const Post = ({ match }) => {
     setErrors(errors);
     if(isValid){
       dispatch(addComment(id, comment));
-      setTimeout(()=>{
-        window.location.reload()
-      },1000);
     }
   };
 
@@ -111,7 +109,7 @@ const Post = ({ match }) => {
           </form>
         </div>
       </div>
-      {comments.map((comment) => (
+      {comments && comments.map((comment) => (
         <Comment
           date={comment.date}
           name={comment.name}

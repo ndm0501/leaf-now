@@ -6,13 +6,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { cartReducer } from "./reducers/cartReducers";
 import { authReducers } from "./reducers/authReducers";
 import { userReducers } from "./reducers/userReducers";
-import {
-  discussionReducers,
-  getDiscussionReducer,
-  addDiscussionReducer,
-  addCommentReducer,
-  deleteCommentReducer,
-} from "./reducers/discussionReducers";
+import discussionReducers from "./reducers/discussionReducers";
 
 import {
   getProductsReducer,
@@ -28,10 +22,6 @@ const reducer = combineReducers({
   uploadProductDetails: uploadProductDetailsReducer,
   auth: authReducers,
   discussions: discussionReducers,
-  getDiscussionPost: getDiscussionReducer,
-  addDiscussion: addDiscussionReducer,
-  addComment: addCommentReducer,
-  deleteComment: deleteCommentReducer,
   userDetails: userReducers,
 });
 

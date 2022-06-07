@@ -9,13 +9,13 @@ export const getProductsReducer = (state = { products: [] }, action) => {
       };
     case actionTypes.GET_PRODUCTS_SUCCESS:
       return {
-        products: action.payload,
+        products: [...state.products, ...action.payload],
         loading: false,
       };
     case actionTypes.GET_PRODUCTS_FAIL:
       return {
         loading: false,
-        error: action.payload,
+        error: {...state.error, ...action.payload},
       };
     default:
       return state;
@@ -31,12 +31,12 @@ export const getProductDetailsReducer = (state = { product: {} }, action) => {
     case actionTypes.GET_PRODUCT_DETAILS_SUCCESS:
       return {
         loading: false,
-        product: action.payload,
+        product: {...state.product, ...action.payload},
       };
     case actionTypes.GET_PRODUCT_DETAILS_FAIL:
       return {
         loading: false,
-        error: action.payload,
+        error: {...state.error, ...action.payload},
       };
     case actionTypes.GET_PRODUCT_DETAILS_RESET:
       return {
@@ -56,12 +56,12 @@ export const uploadProductDetailsReducer = (state={}, action) => {
     case actionTypes.GET_PRODUCT_DETAILS_SUCCESS:
       return {
         loading: false,
-        product: action.payload,
+        product: {...state.product, ...action.payload},
       };
     case actionTypes.GET_PRODUCT_DETAILS_FAIL:
       return {
         loading: false,
-        error: action.payload,
+        error: {...state.error, ...action.payload},
       };
     default:
       return state;

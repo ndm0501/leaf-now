@@ -13,7 +13,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const getProducts = useSelector((state) => state.getProducts);
-  const { products, loading, error } = getProducts;
+  const { products=[], loading, error } = getProducts;
 
   useEffect(() => {
     dispatch(listProducts());
@@ -28,7 +28,7 @@ const HomeScreen = () => {
         ) : error ? (
           <h2>{error}</h2>
         ) : (
-          products.map((product) => (
+          products && products.length && products.map((product) => (
             <Product
               key={product._id}
               name={product.name}

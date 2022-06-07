@@ -24,7 +24,7 @@ export const userReducers = (state = USER_INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: {...state.error, ...action.payload},
       };
     case actionTypes.GET_CURRENT_USER_DATA_REQUEST:
       return { ...state };
@@ -41,9 +41,22 @@ export const userReducers = (state = USER_INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: {...state.error, ...action.payload},
       };
+
     default:
       return { ...state };
   }
 };
+
+export const userDetailsReducers = (state = { user:{} }, action) => {
+  switch(action.type){
+    case actionTypes.ON_USER_DETAILS_CHANGE:
+        return {
+          ...state,
+          user:{
+            ...state.user, [action.payload.key]: action.payload.value
+          }
+        }
+  }
+}

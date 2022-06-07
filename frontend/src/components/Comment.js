@@ -7,15 +7,8 @@ const Comment = ({ postId, name, date, text, commentId }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const handleDeleteComment = () => {
-      debugger
         dispatch(deleteComment(postId, commentId));
-        setTimeout(()=>{
-          window.location.reload();
-        },1000)
-        
     }
-    const commentDetails = useSelector((state) => state.deleteComment);
-    const {comments} = commentDetails;
 
   return (
     <div className="d-flex mt-1 comment__section">

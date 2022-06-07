@@ -8,8 +8,8 @@ import { getAllDiscussions } from "../redux/actions/discussionActions";
 const DiscussionScreen = () => {
     const dispatch = useDispatch();
     const discussionsDetails = useSelector((state) => state.discussions);
-    const { loading, error, discussions } = discussionsDetails;
-    
+    const { loading, error, discussions =[] } = discussionsDetails;
+    debugger
     useEffect(() => {
         dispatch(getAllDiscussions());
       }, [dispatch]);

@@ -16,18 +16,20 @@ const AddPostScreen = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const addDiscussionDetails = useSelector((state) => state.addDiscussion);
-  const { loading, discussion } = addDiscussionDetails;
+  const discussionDetails = useSelector((state) => state.discussions);
+  // const { loading, discussion } = discussionDetails;
+
   const handleChange = (e) => {
       setState(state => ({...state, [e.target.name]: e.target.value}))
   }
   const handlePublish = (e) => {
     e.preventDefault();
     const {errors, isValid} = validateDiscussionPostInput(state);
-    debugger
+    setErrors(errors)
     if(isValid){
       dispatch(addDiscussion(state));
       setTimeout(()=>{
+        alert('Discussion added successfully')
         history.push('/discussions')
       },100);
     }
@@ -48,6 +50,7 @@ const AddPostScreen = () => {
               rows="2"
               onChange={handleChange}
             />
+            {errors['title'] && <small className="text text-danger">{errors['title']}</small>}
           </div>
           <div className="mt-2 form-group">
             <label htmlFor="text">Article content</label>
@@ -58,6 +61,7 @@ const AddPostScreen = () => {
               rows="10"
               onChange={handleChange}
             ></textarea>
+            {errors['text'] && <small className="text text-danger">{errors['text']}</small>}
           </div>
           <Button type="primary" label="Publish" onClick={handlePublish} />
         </form>
